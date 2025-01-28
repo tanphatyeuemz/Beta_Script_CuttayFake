@@ -1,4 +1,4 @@
-local RimusLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/Duc18-code/scriptducv3/refs/heads/main/UInew.lua"))()
+local RimusLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/Duc18-code/scriptducv3/refs/heads/main/UInew.lua"))() 
 local Notify = RimusLib:MakeNotify({
     Title = "Thông Báo",
     Content = "Đã tải xong giao diện!",
@@ -25,37 +25,55 @@ local AdminHatStatus = TabMain:AddLabel({
     Icon = "rbxassetid://100756646036568"
 })
 
--- Kiểm tra mũ admin
-local function checkAdminHat()
-    local hasAdminHat = false
-    for _, item in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
-        if item:IsA("Accessory") and item.Name == "AdminHat" then -- Tên mũ admin
-            hasAdminHat = true
-            break
-        end
-    end
-
-    AdminHatStatus:Set({
-        Title = "Status Mũ Admin: " .. (hasAdminHat and "🟢" or "🔴")
-    })
-end
-
--- Liên tục kiểm tra trạng thái mũ admin
-game:GetService("RunService").RenderStepped:Connect(checkAdminHat)
-
 -- Status Mảnh Gương
 local MirrorStatus = TabMain:AddLabel({
     Title = "Status Mảnh Gương: 🔴", -- Mặc định là không có
     Icon = "rbxassetid://100756646036568"
 })
 
+-- Đợi nhân vật tải xong
+game.Players.LocalPlayer.CharacterAdded:Wait()
+
+-- Debug: In danh sách vật phẩm để xác định tên
+print("Debug: Danh sách vật phẩm trong Character:")
+for _, item in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
+    if item:IsA("Accessory") then
+        print("Accessory Name:", item.Name)
+    end
+end
+
+print("Debug: Danh sách vật phẩm trong Backpack:")
+for _, item in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
+    print("Backpack Item Name:", item.Name)
+end
+
+-- Kiểm tra mũ admin
+local function checkAdminHat()
+    if game.Players.LocalPlayer.Character then
+        local hasAdminHat = false
+        for _, item in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
+            if item:IsA("Accessory") and item.Name == "AdminHat" then -- Thay "AdminHat" bằng tên chính xác
+                hasAdminHat = true
+                break
+            end
+        end
+
+        AdminHatStatus:Set({
+            Title = "Status Mũ Admin: " .. (hasAdminHat and "🟢" or "🔴")
+        })
+    end
+end
+
 -- Kiểm tra mảnh gương
 local function checkMirror()
     local hasMirror = false
-    for _, item in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
-        if item.Name == "MirrorPiece" then -- Tên mảnh gương
-            hasMirror = true
-            break
+    local backpack = game.Players.LocalPlayer:FindFirstChild("Backpack")
+    if backpack then
+        for _, item in pairs(backpack:GetChildren()) do
+            if item.Name == "MirrorPiece" then -- Thay "MirrorPiece" bằng tên chính xác
+                hasMirror = true
+                break
+            end
         end
     end
 
@@ -64,8 +82,11 @@ local function checkMirror()
     })
 end
 
--- Liên tục kiểm tra trạng thái mảnh gương
-game:GetService("RunService").RenderStepped:Connect(checkMirror)
+-- Liên tục kiểm tra trạng thái
+game:GetService("RunService").RenderStepped:Connect(function()
+    checkAdminHat()
+    checkMirror()
+end)
 
 -- Status Pull Level
 TabMain:AddLabel({
