@@ -31,6 +31,18 @@ local MirrorStatus = TabMain:AddLabel({
     Icon = "rbxassetid://100756646036568"
 })
 
+-- Status Pull Level
+TabMain:AddLabel({
+    Title = "Status Pull Level: Đang update!",
+    Icon = "rbxassetid://100756646036568"
+})
+
+-- Status Mirage Island
+TabMain:AddLabel({
+    Title = "Status Mirage Island: Đang update!",
+    Icon = "rbxassetid://100756646036568"
+})
+
 -- Đợi nhân vật tải xong
 game.Players.LocalPlayer.CharacterAdded:Wait()
 
@@ -47,12 +59,12 @@ for _, item in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
     print("Backpack Item Name:", item.Name)
 end
 
--- Kiểm tra mũ admin
+-- Kiểm tra mũ admin (Valkyrie Helm)
 local function checkAdminHat()
     if game.Players.LocalPlayer.Character then
         local hasAdminHat = false
         for _, item in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
-            if item:IsA("Accessory") and item.Name == "AdminHat" then -- Thay "AdminHat" bằng tên chính xác
+            if item:IsA("Accessory") and item.Name == "Valkyrie Helm" then
                 hasAdminHat = true
                 break
             end
@@ -64,13 +76,13 @@ local function checkAdminHat()
     end
 end
 
--- Kiểm tra mảnh gương
+-- Kiểm tra mảnh gương (Mirror Fractal)
 local function checkMirror()
     local hasMirror = false
     local backpack = game.Players.LocalPlayer:FindFirstChild("Backpack")
     if backpack then
         for _, item in pairs(backpack:GetChildren()) do
-            if item.Name == "MirrorPiece" then -- Thay "MirrorPiece" bằng tên chính xác
+            if item.Name == "Mirror Fractal" then
                 hasMirror = true
                 break
             end
@@ -87,9 +99,3 @@ game:GetService("RunService").RenderStepped:Connect(function()
     checkAdminHat()
     checkMirror()
 end)
-
--- Status Pull Level
-TabMain:AddLabel({
-    Title = "Status Pull Level: Dev đang update, sẽ có sớm!",
-    Icon = "rbxassetid://100756646036568"
-})
